@@ -8,7 +8,7 @@
             "name": "C#: day-2 Debug",
             "type": "dotnet",
             "request": "launch",
-            "projectPath": "${workspaceFolder}/2024/day-2/day-2.csproj"
+            "projectPath": "${workspaceFolder}/2024/advent-of-code.csproj"
         }
     ]
 }
