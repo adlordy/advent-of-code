@@ -22,20 +22,7 @@ public class Problem12 : ProblemBase {
             return (edge.to, edge.origin);
         }
     }
-    record struct Point(int X, int Y){
-        public static Point operator -(Point a, Point b){
-            return new Point(a.X - b.X, a.Y - b.Y);
-        }
-
-        public static Point operator +(Point a, Point b){
-            return new Point(a.X + b.X, a.Y + b.Y);
-        }
-
-        public bool InBound(Point bound)
-        {
-            return X >= 0 && Y >=0 && X < bound.X && Y < bound.Y;
-        }
-    }
+    
     Direction[] dirs = [
         new(new(1, 0),  new(1, 1),  new(1, 0)),
         new(new(0, 1),  new(0, 1), new(1, 1)),

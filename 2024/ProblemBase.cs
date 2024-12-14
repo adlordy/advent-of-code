@@ -32,3 +32,23 @@ public abstract class ProblemBase
 
     private Uri GetInputUri(int id) => new Uri(_base, $"2024/day/{id}/input");
 }
+
+
+public record struct Point(long X, long Y){
+    public static Point operator -(Point a, Point b){
+        return new Point(a.X - b.X, a.Y - b.Y);
+    }
+
+    public static Point operator +(Point a, Point b){
+        return new Point(a.X + b.X, a.Y + b.Y);
+    }
+
+    public static Point operator *(Point a, long b){
+        return new Point(a.X * b, a.Y * b);
+    }
+
+    public bool InBound(Point bound)
+    {
+        return X >= 0 && Y >=0 && X < bound.X && Y < bound.Y;
+    }
+}
