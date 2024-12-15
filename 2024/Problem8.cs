@@ -1,19 +1,5 @@
 namespace adlordy;
 
-public record struct P(int x, int y){
-    public static P operator -(P a, P b){
-        return new P(a.x - b.x, a.y - b.y);
-    }
-
-    public static P operator +(P a, P b){
-        return new P(a.x + b.x, a.y + b.y);
-    }
-
-    public bool InBound(P bound)
-    {
-        return x >= 0 && y >=0 && x < bound.x && y < bound.y;
-    }
-}
 public class Problem8 : ProblemBase {
     string sample = 
     """
@@ -36,35 +22,35 @@ public class Problem8 : ProblemBase {
         var map = content.Split("\n", StringSplitOptions.RemoveEmptyEntries)
             .Select(l=>l.ToCharArray()).ToArray();
 
-        var bound = new P(map.Length, map[0].Length);
-        var nodeMap = new bool[bound.x, bound.y];
-        var sets = new Dictionary<char, List<P>>();
-        for(var i=0;i<bound.x;i++)
-            for(var j=0;j<bound.y;j++){
+        var bound = new Point(map.Length, map[0].Length);
+        var nodeMap = new bool[bound.X, bound.Y];
+        var sets = new Dictionary<char, List<Point>>();
+        for(var i=0;i<bound.X;i++)
+            for(var j=0;j<bound.Y;j++){
                 var c = map[i][j];
                 if (c != '.'){
                     if (!sets.TryGetValue(c, out var list)){
-                        sets[c] = list = new List<P>();
+                        sets[c] = list = new List<Point>();
                     }
-                    list.Add(new P(i, j));
+                    list.Add(new Point(i, j));
                 }
             }
         foreach(var set in sets.Values){
             for(var i=0;i<set.Count-1;i++){
                 for(var j=i+1;j<set.Count;j++){
                     var a = set[i];
-                    nodeMap[a.x, a.y] = true;
+                    nodeMap[a.X, a.Y] = true;
                     var b = set[j];
-                    nodeMap[b.x, b.y] = true;
+                    nodeMap[b.X, b.Y] = true;
                     var d = a - b;
                     var p1 = a + d;
                     while (p1.InBound(bound)){
-                        nodeMap[p1.x, p1.y] = true;
+                        nodeMap[p1.X, p1.Y] = true;
                         p1 = p1 + d;
                     }
                     var p2 = b - d;
                     while (p2.InBound(bound)){
-                        nodeMap[p2.x, p2.y] = true;
+                        nodeMap[p2.X, p2.Y] = true;
                         p2 = p2 - d;
                     }
                 }
@@ -72,8 +58,8 @@ public class Problem8 : ProblemBase {
         }
 
         var count = 0;
-        for(var i=0;i<bound.x;i++)
-            for(var j=0;j<bound.y;j++){
+        for(var i=0;i<bound.X;i++)
+            for(var j=0;j<bound.Y;j++){
                 count += nodeMap[i,j] ? 1 : 0;
             }
         return count;

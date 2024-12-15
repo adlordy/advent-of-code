@@ -47,6 +47,14 @@ public record struct Point(long X, long Y){
         return new Point(a.X * b, a.Y * b);
     }
 
+    public static Point operator /(Point a, long b){
+        return new Point(a.X / b, a.Y / b);
+    }
+
+    public static Point operator %(Point a, Point b){
+        return new Point(a.X % b.X, a.Y % b.Y);
+    }
+
     public bool InBound(Point bound)
     {
         return X >= 0 && Y >=0 && X < bound.X && Y < bound.Y;
