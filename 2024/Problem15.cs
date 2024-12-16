@@ -1,7 +1,3 @@
-
-using System.Collections.Specialized;
-using System.Runtime.CompilerServices;
-
 namespace adlordy;
 
 public class Problem15 : ProblemBase{
@@ -42,13 +38,6 @@ public class Problem15 : ProblemBase{
         '<' => Direction.Left,
         _ => throw new ArgumentOutOfRangeException(),
     };
-
-    enum Direction {
-        Right,
-        Down,
-        Left,
-        Up
-    }
 
     class Map {
         private List<Cell[]> _lines;

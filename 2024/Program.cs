@@ -1,4 +1,4 @@
 ﻿using adlordy;
 
-var result = await new Problem15().SolveA();
+var result = await new Problem16().SolveA();
 Console.WriteLine(result);

@@ -59,4 +59,63 @@ public record struct Point(long X, long Y){
     {
         return X >= 0 && Y >=0 && X < bound.X && Y < bound.Y;
     }
+
+    public static Point FromDirection(Direction d){
+        return d switch{
+            Direction.Right => new Point(0, 1),
+                Direction.Down => new Point(1, 0),
+                Direction.Left => new Point(0, -1),
+                Direction.Up => new Point(-1, 0),
+                _ => throw new ArgumentOutOfRangeException(),
+        };
+    }
 }
+
+    public enum Direction {
+        Right,
+        Down,
+        Left,
+        Up
+    }
+
+    public static class DirectionExtensions{
+        public static char GetChar(this Direction direction){
+            return direction switch {
+                Direction.Right => '>',
+                Direction.Down => 'v',
+                Direction.Left => '<',
+                Direction.Up => '^',
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+        public static Direction Clocwise(this Direction direction){
+            return direction switch {
+                Direction.Right => Direction.Down,
+                Direction.Down => Direction.Left,
+                Direction.Left => Direction.Up,
+                Direction.Up => Direction.Right,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+        public static Direction CounterClocwise(this Direction direction){
+            return direction switch {
+                Direction.Right => Direction.Up,
+                Direction.Down => Direction.Right,
+                Direction.Left => Direction.Down,
+                Direction.Up => Direction.Left,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+
+        public static Direction Opposite(this Direction direction){
+            return direction switch {
+                Direction.Right => Direction.Left,
+                Direction.Down => Direction.Up,
+                Direction.Left => Direction.Right,
+                Direction.Up => Direction.Down,
+                _ => throw new ArgumentOutOfRangeException(),
+            };
+        }
+    }
