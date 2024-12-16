@@ -41,37 +41,45 @@ public class Problem16 : ProblemBase {
         }
 
         var priorityQueue = new PriorityQueue<QueueItem, long>();
-        priorityQueue.Enqueue(new(start, Direction.Right, 0, [start]), 0);
-        long best = long.MaxValue;
-        var paths = new HashSet<Point>{start, end};
+        priorityQueue.Enqueue(new(start, Direction.Right, 0, []), 0);
         while(priorityQueue.Count > 0){
             var item = priorityQueue.Dequeue();
+            var path = new HashSet<Point>(item.Path) { item.Position };
+            if (priorityQueue.Count > 0 
+                && priorityQueue.Peek().Score == item.Score)
+            {
+                var nexItem = priorityQueue.Dequeue();
+                path.UnionWith(nexItem.Path);
+            }
+            
             var next = item.Position + Point.FromDirection(item.Direction);
-
             char c = map[(int)next.X][next.Y];
-            if (c == 'E'){
-                best = item.Score;
-                paths.UnionWith(item.Path);
-            } else {
-                if (c == '.' && item.Score + 1 <= best){
-                    priorityQueue.Enqueue(new(next, item.Direction, item.Score + 1, [..item.Path, next]), item.Score + 1);
-                }
+            if (c == 'E') {
+                return item.Path.Count + 1;
+            }
 
-                var clockwise = item.Direction.Clocwise();
-                var nextClockwise = item.Position + Point.FromDirection(clockwise);
-                if ((map[(int)nextClockwise.X][nextClockwise.Y] == '.' || nextClockwise == end) && item.Score + 1000 <= best){
-                    priorityQueue.Enqueue(new(item.Position, item.Direction.Clocwise(), item.Score + 1000, item.Path), item.Score + 1000);
-                }
-                var counterClockwise = item.Direction.CounterClocwise();
-                var nextCounterClockwise = item.Position + Point.FromDirection(counterClockwise);
-                if ((map[(int)nextCounterClockwise.X][nextCounterClockwise.Y] == '.' || nextCounterClockwise == end) && item.Score + 1000 <= best){
-                    priorityQueue.Enqueue(new(item.Position, item.Direction.CounterClocwise(), item.Score + 1000, item.Path), item.Score + 1000);
-                }
+            if (c == '.'){
+                priorityQueue.Enqueue(new(next, item.Direction, item.Score + 1, path), item.Score + 1);
+            }
+
+            var clockwise = item.Direction.Clocwise();
+            var nextClockwise = item.Position + Point.FromDirection(clockwise);
+            if (map[(int)nextClockwise.X][nextClockwise.Y] != '#'){
+                priorityQueue.Enqueue(new(nextClockwise, item.Direction.Clocwise(), item.Score + 1001, path), item.Score + 1000);
+            }
+            var counterClockwise = item.Direction.CounterClocwise();
+            var nextCounterClockwise = item.Position + Point.FromDirection(counterClockwise);
+            if (map[(int)nextCounterClockwise.X][nextCounterClockwise.Y] != '#'){
+                priorityQueue.Enqueue(new(nextCounterClockwise, item.Direction.CounterClocwise(), item.Score + 1001, path), item.Score + 1000);
+            }
+
+            if (c != 'S'){
+                map[(int)next.X][next.Y] = item.Direction.GetChar();
             }
         }
 
-        return paths.Count;
+        return 0;
     }
 
-    record struct QueueItem(Point Position, Direction Direction, long Score, List<Point> Path);
+    record struct QueueItem(Point Position, Direction Direction, long Score, HashSet<Point> Path);
 }
